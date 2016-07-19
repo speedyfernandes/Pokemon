@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import nz.co.powershop.pokemon.R;
 import nz.co.powershop.pokemon.adapters.PokemonsAdapter;
+import nz.co.powershop.pokemon.interactor.GetPokemonsInteractor;
 import nz.co.powershop.pokemon.model.Pokemon;
 import nz.co.powershop.pokemon.presenter.PokemonsListPresenter;
 
@@ -19,6 +20,7 @@ public class PokemonsListActivity extends AppCompatActivity implements PokemonsL
 
     private ListView lvPokemons;
     private PokemonsListPresenter presenter;
+    private GetPokemonsInteractor interactor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +30,8 @@ public class PokemonsListActivity extends AppCompatActivity implements PokemonsL
         lvPokemons = (ListView) findViewById(R.id.lvPokemons);
         lvPokemons.setOnItemClickListener(this);
 
-        presenter = new PokemonsListPresenter(this, getAssets());
+        interactor = new GetPokemonsInteractor(getAssets());
+        presenter = new PokemonsListPresenter(this, interactor);
     }
 
     @Override
@@ -36,6 +39,13 @@ public class PokemonsListActivity extends AppCompatActivity implements PokemonsL
         super.onStart();
 
         presenter.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        presenter.onStop();
     }
 
     @Override
