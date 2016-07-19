@@ -6,26 +6,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Locale;
 
 import nz.co.powershop.pokemon.R;
-import nz.co.powershop.pokemon.interactor.GetPokemonDetailsInteractor;
-import nz.co.powershop.pokemon.model.Pokemon;
-import rx.Observable;
-import rx.Observer;
+import nz.co.powershop.pokemon.presenter.PokemonDetailPresenter;
 
-public class PokemonDetailActivity extends AppCompatActivity {
+public class PokemonDetailActivity extends AppCompatActivity implements PokemonDetailView {
 
     private ImageView ivImage;
     private TextView txtName;
     private TextView txtWeight;
     private TextView txtHeight;
     private TextView txtExperience;
-    private int pokemonId;
+    private PokemonDetailPresenter presenter;
 
     public static final String POKEMON_ID = "POKEMON_ID";
 
@@ -40,29 +34,22 @@ public class PokemonDetailActivity extends AppCompatActivity {
         txtHeight = (TextView) findViewById(R.id.txtHeight);
         txtExperience = (TextView) findViewById(R.id.txtExperience);
 
-        pokemonId = getIntent().getIntExtra(POKEMON_ID, 1);
-
-        loadData();
+        presenter = new PokemonDetailPresenter(this, getIntent().getIntExtra(POKEMON_ID, 1),
+                getAssets());
     }
 
-    private void loadData() {
-        String json = null;
-        try {
-            InputStream is = getAssets().open(String.format(Locale.US, "pokemondetails%d.json", pokemonId));
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+    @Override
+    protected void onStart() {
+        super.onStart();
 
-        Pokemon pokemon = new Gson().fromJson(json, Pokemon.class);
+        presenter.onStart();
+    }
 
+    @Override
+    public void setImage(String image) {
         InputStream stream = null;
         try {
-            stream = getAssets().open(pokemon.getImage());
+            stream = getAssets().open(image);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -70,10 +57,25 @@ public class PokemonDetailActivity extends AppCompatActivity {
             Drawable d = Drawable.createFromStream(stream, null);
             ivImage.setImageDrawable(d);
         }
+    }
 
-        txtName.setText(pokemon.getName());
-        txtHeight.setText(String.format("Height %d", pokemon.getHeight()));
-        txtWeight.setText(String.format("Weight %d", pokemon.getWeight()));
-        txtExperience.setText(String.format("Experience %d", pokemon.getBase_experience()));
+    @Override
+    public void setName(String name) {
+        txtName.setText(name);
+    }
+
+    @Override
+    public void setHeight(int height) {
+        txtHeight.setText(String.format("Height %d", height));
+    }
+
+    @Override
+    public void setWeight(int weight) {
+        txtWeight.setText(String.format("Weight %d", weight));
+    }
+
+    @Override
+    public void setExperience(int base_experience) {
+        txtExperience.setText(String.format("Experience %d", base_experience));
     }
 }
