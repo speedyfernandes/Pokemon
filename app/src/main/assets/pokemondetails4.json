@@ -1,0 +1,8 @@
+{
+  "name": "charmander",
+  "weight": 85,
+  "height": 6,
+  "id": 4,
+  "base_experience": 62,
+  "image": "pokemon4.png"
+}

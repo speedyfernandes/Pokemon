@@ -1,0 +1,8 @@
+{
+  "name": "pidgey",
+  "weight": 18,
+  "height": 3,
+  "id": 16,
+  "base_experience": 50,
+  "image": "pokemon16.png"
+}

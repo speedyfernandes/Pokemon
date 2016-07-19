@@ -1,0 +1,8 @@
+{
+  "name": "charizard",
+  "weight": 905,
+  "height": 17,
+  "id": 6,
+  "base_experience": 240,
+  "image": "pokemon6.png"
+}

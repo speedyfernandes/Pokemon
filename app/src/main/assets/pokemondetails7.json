@@ -1,0 +1,8 @@
+{
+  "name": "squirtle",
+  "weight": 90,
+  "height": 5,
+  "id": 7,
+  "base_experience": 63,
+  "image": "pokemon7.png"
+}

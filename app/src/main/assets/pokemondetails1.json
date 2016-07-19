@@ -1,0 +1,8 @@
+{
+  "name": "bulbasaur",
+  "weight": 69,
+  "height": 7,
+  "id": 1,
+  "base_experience": 64,
+  "image": "pokemon1.png"
+}

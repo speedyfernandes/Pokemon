@@ -1,0 +1,8 @@
+{
+  "name": "venusaur",
+  "weight": 130,
+  "height": 1000,
+  "id": 3,
+  "base_experience": 236,
+  "image": "pokemon3.png"
+}
