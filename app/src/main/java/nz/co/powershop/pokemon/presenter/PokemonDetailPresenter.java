@@ -1,48 +1,46 @@
 package nz.co.powershop.pokemon.presenter;
 
-import android.content.res.AssetManager;
-
-import com.google.gson.Gson;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Locale;
-
+import nz.co.powershop.pokemon.interactor.GetPokemonDetailsInteractor;
 import nz.co.powershop.pokemon.model.Pokemon;
 import nz.co.powershop.pokemon.view.PokemonDetailView;
+import rx.Observer;
 
 /**
  * Created by Jerry on 19/07/16.
  */
-public class PokemonDetailPresenter {
+public class PokemonDetailPresenter implements Observer<Pokemon> {
 
     private PokemonDetailView pokemonDetailView;
     private int pokemonId;
-    private AssetManager assets;
+    private GetPokemonDetailsInteractor interactor;
 
     public PokemonDetailPresenter(PokemonDetailView pokemonDetailView, int pokemonId,
-                                  AssetManager assets) {
+                                  GetPokemonDetailsInteractor interactor) {
         this.pokemonDetailView = pokemonDetailView;
         this.pokemonId = pokemonId;
-        this.assets = assets;
+        this.interactor = interactor;
     }
 
     public void onStart() {
+        interactor.execute(pokemonId, this);
+    }
 
-        String json = null;
-        try {
-            InputStream is = assets.open(String.format(Locale.US, "pokemondetails%d.json", pokemonId));
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+    public void onStop() {
+        interactor.cancel();
+    }
 
-        Pokemon pokemon = new Gson().fromJson(json, Pokemon.class);
+    @Override
+    public void onCompleted() {
 
+    }
+
+    @Override
+    public void onError(Throwable e) {
+
+    }
+
+    @Override
+    public void onNext(Pokemon pokemon) {
         pokemonDetailView.setImage(pokemon.getImage());
         pokemonDetailView.setName(pokemon.getName());
         pokemonDetailView.setHeight(pokemon.getHeight());

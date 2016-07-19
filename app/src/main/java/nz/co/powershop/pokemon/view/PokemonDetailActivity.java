@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import nz.co.powershop.pokemon.R;
+import nz.co.powershop.pokemon.interactor.GetPokemonDetailsInteractor;
 import nz.co.powershop.pokemon.presenter.PokemonDetailPresenter;
 
 public class PokemonDetailActivity extends AppCompatActivity implements PokemonDetailView {
@@ -19,6 +20,7 @@ public class PokemonDetailActivity extends AppCompatActivity implements PokemonD
     private TextView txtWeight;
     private TextView txtHeight;
     private TextView txtExperience;
+    private GetPokemonDetailsInteractor interactor;
     private PokemonDetailPresenter presenter;
 
     public static final String POKEMON_ID = "POKEMON_ID";
@@ -34,8 +36,8 @@ public class PokemonDetailActivity extends AppCompatActivity implements PokemonD
         txtHeight = (TextView) findViewById(R.id.txtHeight);
         txtExperience = (TextView) findViewById(R.id.txtExperience);
 
-        presenter = new PokemonDetailPresenter(this, getIntent().getIntExtra(POKEMON_ID, 1),
-                getAssets());
+        interactor = new GetPokemonDetailsInteractor(getAssets());
+        presenter = new PokemonDetailPresenter(this, getIntent().getIntExtra(POKEMON_ID, 1), interactor);
     }
 
     @Override
@@ -43,6 +45,13 @@ public class PokemonDetailActivity extends AppCompatActivity implements PokemonD
         super.onStart();
 
         presenter.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        presenter.onStop();
     }
 
     @Override
